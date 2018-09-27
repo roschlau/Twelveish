@@ -32,7 +32,7 @@ class Prefs(val ctx: Context, val prefs: SharedPreferences) {
     val ampm = bool(R.string.preference_ampm, true)
     val showSecondary = bool(R.string.preference_show_secondary, true)
     val showSecondaryActive = bool(R.string.preference_show_secondary_active, true)
-    val showSecondaryCalendar = bool(R.string.preference_show_secondary_calendar, true)
+    val showSecondaryCalendarInactive = bool(R.string.preference_show_secondary_calendar, true)
     val showSecondaryCalendarActive = bool(R.string.preference_show_secondary_calendar_active, true)
     val showSuffixes = bool(R.string.preference_show_suffixes, true)
     val showBattery = bool(R.string.preference_show_battery, true)

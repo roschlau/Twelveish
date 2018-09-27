@@ -67,14 +67,12 @@ class MyWatchFace : CanvasWatchFaceService() {
         private set
 
     override fun onCreateEngine(): Engine {
-        applicationContext.registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                batteryLevel = (100 * intent.getIntExtra(
-                    BatteryManager.EXTRA_LEVEL,
-                    -1
-                ) / intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1).toFloat()).toInt()
-            }
-        }, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        applicationContext.registerReceiver(Intent.ACTION_BATTERY_CHANGED) { _, intent ->
+            batteryLevel = (100 * intent.getIntExtra(
+                BatteryManager.EXTRA_LEVEL,
+                -1
+            ) / intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1).toFloat()).toInt()
+        }
         return Engine()
     }
 
@@ -126,7 +124,7 @@ class MyWatchFace : CanvasWatchFaceService() {
         }
         private var mRegisteredTimeZoneReceiver = false
         private var mChinSize: Float = 0.toFloat()
-        private var mBackgroundPaint: Paint? = null
+        private lateinit var mBackgroundPaint: Paint
         private lateinit var mTextPaint: Paint
         private lateinit var mTextPaint2: Paint
         private var mLowBitAmbient: Boolean = false
@@ -144,7 +142,7 @@ class MyWatchFace : CanvasWatchFaceService() {
             )
 
             mBackgroundPaint = Paint()
-            mBackgroundPaint!!.color =
+            mBackgroundPaint.color =
                     ContextCompat.getColor(applicationContext, R.color.background)
 
             mTextPaint = Paint().apply {
@@ -422,26 +420,26 @@ class MyWatchFace : CanvasWatchFaceService() {
 
         private fun onComplicationTap(complicationId: Int) {
             val complicationData = mActiveComplicationDataSparseArray!!.get(complicationId)
-            if (complicationData != null) {
-                if (complicationData.tapAction != null) {
-                    try {
-                        complicationData.tapAction.send()
-                    } catch (e: PendingIntent.CanceledException) {
-                        Log.e(TAG, "onComplicationTap() tap action error: $e")
-                    }
-
-                } else if (complicationData.type == ComplicationData.TYPE_NO_PERMISSION) {
-                    val componentName = ComponentName(
-                        applicationContext, MyWatchFace::class.java
-                    )
-                    val permissionRequestIntent =
-                        ComplicationHelperActivity.createPermissionRequestHelperIntent(
-                            applicationContext, componentName
-                        )
-                    startActivity(permissionRequestIntent)
-                }
-            } else {
+            if (complicationData == null) {
                 Log.d(TAG, "No PendingIntent for complication $complicationId.")
+                return
+            }
+            if (complicationData.tapAction != null) {
+                try {
+                    complicationData.tapAction.send()
+                } catch (e: PendingIntent.CanceledException) {
+                    Log.e(TAG, "onComplicationTap() tap action error: $e")
+                }
+
+            } else if (complicationData.type == ComplicationData.TYPE_NO_PERMISSION) {
+                val componentName = ComponentName(
+                    applicationContext, MyWatchFace::class.java
+                )
+                val permissionRequestIntent =
+                    ComplicationHelperActivity.createPermissionRequestHelperIntent(
+                        applicationContext, componentName
+                    )
+                startActivity(permissionRequestIntent)
             }
         }
 
@@ -470,20 +468,22 @@ class MyWatchFace : CanvasWatchFaceService() {
                 mCalendar.get(Calendar.HOUR_OF_DAY) + localization.timeshift[index]
             else
                 mCalendar.get(Calendar.HOUR) + localization.timeshift[index]
-            if (hourText >= 24 && prefs.militaryTextTime)
+            if (prefs.militaryTextTime && hourText >= 24) {
                 hourText -= 24
-            else if (hourText > 12 && (!prefs.militaryTextTime))
+            } else if (!prefs.militaryTextTime && hourText > 12) {
                 hourText -= 12
-            if (hourText == 0 && (!prefs.militaryTextTime))
+            }
+            if (!prefs.militaryTextTime && hourText == 0) {
                 hourText = 12
+            }
 
             //Get digital clock
             val ampmSymbols =
-                if (prefs.ampm) if (mCalendar.get(Calendar.HOUR_OF_DAY) >= 12) " pm" else " am" else ""
-            var text = if (mAmbient || !prefs.showSeconds)
-                String.format(Locale.UK, "%d:%02d$ampmSymbols", hourDigital, minutes)
-            else
-                String.format(Locale.UK, "%d:%02d:%02d$ampmSymbols", hourDigital, minutes, seconds)
+                when {
+                    !prefs.ampm -> ""
+                    mCalendar.get(Calendar.HOUR_OF_DAY) >= 12 -> " pm"
+                    else -> " am"
+                }
 
             //Get date
             val first: Int
@@ -522,49 +522,69 @@ class MyWatchFace : CanvasWatchFaceService() {
                     fourFirst = false
                 }
             }
-            var text3: String
-            if (fourFirst)
-                text3 = String.format(
+            val shouldDisplayDate = (isInAmbientMode && prefs.showSecondaryCalendarInactive)
+                    || (!isInAmbientMode && prefs.showSecondaryCalendarActive)
+            val dateDisplay = when {
+                !shouldDisplayDate -> ""
+                fourFirst -> String.format(
                     Locale.UK,
                     "%04d${prefs.dateSeparator}%02d${prefs.dateSeparator}%02d",
                     first,
                     second,
                     third
                 )
-            else
-                text3 = String.format(
+                else -> String.format(
                     Locale.UK,
                     "%02d${prefs.dateSeparator}%02d${prefs.dateSeparator}%04d",
                     first,
                     second,
                     third
                 )
+            }
 
             //Get battery percentage
-            var text1 = batteryLevel.toString() + "%"
+            val shouldDisplayBattery = (isInAmbientMode && prefs.showBatteryAmbient)
+                    || (!isInAmbientMode && prefs.showBattery)
+            val batteryDisplay =
+                if (!shouldDisplayBattery) {
+                    ""
+                } else {
+                    batteryLevel.toString() + "%"
+                }
 
             //Get day of the week
-            var dayOfTheWeek = ""
-            if (isInAmbientMode && prefs.showDayAmbient || !isInAmbientMode && prefs.showDay)
-                dayOfTheWeek = localization.weekDays[mCalendar.get(Calendar.DAY_OF_WEEK) - 1]
+            val shouldDisplayDayOfWeek = (isInAmbientMode && prefs.showDayAmbient)
+                    || (!isInAmbientMode && prefs.showDay)
+            val dayOfTheWeek =
+                if (shouldDisplayDayOfWeek) {
+                    localization.weekDays[mCalendar.get(Calendar.DAY_OF_WEEK) - 1]
+                } else {
+                    ""
+                }
 
             //Draw digital clock, date, battery percentage and day of the week
             var firstSeparator = 40.0f
-            if (isInAmbientMode && (!prefs.showSecondary) || !isInAmbientMode && (!prefs.showSecondaryActive)) {
-                text = ""
+
+            var timeDisplay = if (mAmbient || !prefs.showSeconds) {
+                String.format(Locale.UK, "%d:%02d$ampmSymbols", hourDigital, minutes)
+            } else {
+                String.format(Locale.UK, "%d:%02d:%02d$ampmSymbols", hourDigital, minutes, seconds)
             }
-            if (text != "" || dayOfTheWeek != "") {
-                if (text != "" && dayOfTheWeek != "") {
+            if (isInAmbientMode && (!prefs.showSecondary) || !isInAmbientMode && (!prefs.showSecondaryActive)) {
+                timeDisplay = ""
+            }
+            if (timeDisplay != "" || dayOfTheWeek != "") {
+                if (timeDisplay != "" && dayOfTheWeek != "") {
                     canvas.drawText(
-                        "$text • $dayOfTheWeek",
+                        "$timeDisplay • $dayOfTheWeek",
                         (bounds.width() / 2).toFloat(),
                         firstSeparator - mTextPaint.ascent(),
                         mTextPaint
                     )
                     firstSeparator = 40 - mTextPaint.ascent() + mTextPaint.descent()
-                } else if (text != "") {
+                } else if (timeDisplay != "") {
                     canvas.drawText(
-                        text,
+                        timeDisplay,
                         (bounds.width() / 2).toFloat(),
                         firstSeparator - mTextPaint.ascent(),
                         mTextPaint
@@ -580,24 +600,18 @@ class MyWatchFace : CanvasWatchFaceService() {
                     firstSeparator = 40 - mTextPaint.ascent() + mTextPaint.descent()
                 }
             }
-            if (!(isInAmbientMode && prefs.showSecondaryCalendar || !isInAmbientMode && prefs.showSecondaryCalendarActive)) {
-                text3 = ""
-            }
-            if (!(isInAmbientMode && prefs.showBatteryAmbient || !isInAmbientMode && prefs.showBattery)) {
-                text1 = ""
-            }
-            if (text3 != "" || text1 != "") {
-                if (text3 != "" && text1 != "") {
+            if (dateDisplay != "" || batteryDisplay != "") {
+                if (dateDisplay != "" && batteryDisplay != "") {
                     canvas.drawText(
-                        "$text3 • $text1",
+                        "$dateDisplay • $batteryDisplay",
                         (bounds.width() / 2).toFloat(),
                         firstSeparator - mTextPaint.ascent(),
                         mTextPaint
                     )
                     firstSeparator = firstSeparator - mTextPaint.ascent() + mTextPaint.descent()
-                } else if (text3 != "") {
+                } else if (dateDisplay != "") {
                     canvas.drawText(
-                        text3,
+                        dateDisplay,
                         (bounds.width() / 2).toFloat(),
                         firstSeparator - mTextPaint.ascent(),
                         mTextPaint
@@ -605,7 +619,7 @@ class MyWatchFace : CanvasWatchFaceService() {
                     firstSeparator = firstSeparator - mTextPaint.ascent() + mTextPaint.descent()
                 } else {
                     canvas.drawText(
-                        text1,
+                        batteryDisplay,
                         (bounds.width() / 2).toFloat(),
                         firstSeparator - mTextPaint.ascent(),
                         mTextPaint
