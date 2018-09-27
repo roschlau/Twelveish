@@ -51,7 +51,7 @@ public class ComplicationConfigActivity extends Activity implements View.OnClick
         mSelectedComplicationId = -1;
 
         mBottomComplicationId =
-                MyWatchFace.getComplicationId(ComplicationLocation.BOTTOM);
+                MyWatchFace.Companion.getComplicationId(ComplicationLocation.BOTTOM);
 
         mWatchFaceComponentName =
                 new ComponentName(getApplicationContext(), MyWatchFace.class);
@@ -78,7 +78,7 @@ public class ComplicationConfigActivity extends Activity implements View.OnClick
 
     public void retrieveInitialComplicationsData() {
 
-        final int[] complicationIds = MyWatchFace.getComplicationIds();
+        final int[] complicationIds = MyWatchFace.Companion.getComplicationIds();
 
         mProviderInfoRetriever.retrieveProviderInfo(
                 new ProviderInfoRetriever.OnProviderInfoReceivedCallback() {
@@ -102,10 +102,10 @@ public class ComplicationConfigActivity extends Activity implements View.OnClick
 
     private void launchComplicationHelperActivity(ComplicationLocation complicationLocation) {
         mSelectedComplicationId =
-                MyWatchFace.getComplicationId(complicationLocation);
+                MyWatchFace.Companion.getComplicationId(complicationLocation);
         if (mSelectedComplicationId >= 0) {
             int[] supportedTypes =
-                    MyWatchFace.getSupportedComplicationTypes(
+                    MyWatchFace.Companion.getSupportedComplicationTypes(
                             complicationLocation);
             startActivityForResult(
                     ComplicationHelperActivity.createProviderChooserHelperIntent(
