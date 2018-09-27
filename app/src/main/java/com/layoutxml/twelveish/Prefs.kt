@@ -26,8 +26,10 @@ class Prefs(val ctx: Context, val prefs: SharedPreferences) {
     val secondaryColorAmbient = int(R.string.preference_secondary_color_ambient, Color.parseColor("#ffffff"))
     val militaryTime = bool(R.string.preference_military_time, false)
     val militaryTextTime = bool(R.string.preference_militarytext_time, false)
-    val dateOrder = int(R.string.preference_date_order, 0)
-    val dateSeparator = string(R.string.preference_date_separator, "/")
+    val dateFormat = dateFormatter(
+        int(R.string.preference_date_order, 0),
+        string(R.string.preference_date_separator, "/")
+    )
     val capitalisation = int(R.string.preference_capitalisation, 0)
     val ampm = bool(R.string.preference_ampm, true)
     val showSecondary = bool(R.string.preference_show_secondary, true)

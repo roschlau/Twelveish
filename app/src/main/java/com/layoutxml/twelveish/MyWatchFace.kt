@@ -30,6 +30,7 @@ import android.view.SurfaceHolder
 import android.view.WindowInsets
 import com.layoutxml.twelveish.config.ComplicationConfigActivity
 import com.layoutxml.twelveish.config.DigitalWatchFaceWearableConfigActivity
+import org.joda.time.LocalDate
 import java.lang.ref.WeakReference
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -484,62 +485,11 @@ class MyWatchFace : CanvasWatchFaceService() {
                     mCalendar.get(Calendar.HOUR_OF_DAY) >= 12 -> " pm"
                     else -> " am"
                 }
-
-            //Get date
-            val first: Int
-            val second: Int
-            val third: Int
-            val fourFirst: Boolean
-            when (prefs.dateOrder) {
-                0 -> {
-                    first = mCalendar.get(Calendar.MONTH) + 1 //MDY
-                    second = mCalendar.get(Calendar.DAY_OF_MONTH)
-                    third = mCalendar.get(Calendar.YEAR)
-                    fourFirst = false
-                }
-                1 -> {
-                    first = mCalendar.get(Calendar.DAY_OF_MONTH) //DMY
-                    second = mCalendar.get(Calendar.MONTH) + 1
-                    third = mCalendar.get(Calendar.YEAR)
-                    fourFirst = false
-                }
-                2 -> {
-                    first = mCalendar.get(Calendar.YEAR) //YMD
-                    second = mCalendar.get(Calendar.MONTH) + 1
-                    third = mCalendar.get(Calendar.DAY_OF_MONTH)
-                    fourFirst = true
-                }
-                3 -> {
-                    first = mCalendar.get(Calendar.YEAR) //YDM
-                    second = mCalendar.get(Calendar.DAY_OF_MONTH)
-                    third = mCalendar.get(Calendar.MONTH) + 1
-                    fourFirst = true
-                }
-                else -> {
-                    first = mCalendar.get(Calendar.MONTH) + 1
-                    second = mCalendar.get(Calendar.DAY_OF_MONTH)
-                    third = mCalendar.get(Calendar.YEAR)
-                    fourFirst = false
-                }
-            }
             val shouldDisplayDate = (isInAmbientMode && prefs.showSecondaryCalendarInactive)
                     || (!isInAmbientMode && prefs.showSecondaryCalendarActive)
             val dateDisplay = when {
                 !shouldDisplayDate -> ""
-                fourFirst -> String.format(
-                    Locale.UK,
-                    "%04d${prefs.dateSeparator}%02d${prefs.dateSeparator}%02d",
-                    first,
-                    second,
-                    third
-                )
-                else -> String.format(
-                    Locale.UK,
-                    "%02d${prefs.dateSeparator}%02d${prefs.dateSeparator}%04d",
-                    first,
-                    second,
-                    third
-                )
+                else -> prefs.dateFormat.print(LocalDate.fromCalendarFields(mCalendar))
             }
 
             //Get battery percentage
