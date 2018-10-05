@@ -6,93 +6,39 @@
 
 package com.layoutxml.twelveish.activities
 
-import android.app.Activity
-import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.PorterDuff.Mode
-import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.RecyclerView
-import android.support.wear.widget.WearableLinearLayoutManager
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.layoutxml.twelveish.R
 import com.layoutxml.twelveish.objects.Color
 import kotlinx.android.synthetic.main.imageview_and_textview_item.view.*
-import kotlinx.android.synthetic.main.wearablerecyclerview_activity.*
 
-class ColorOptionsActivity : Activity() {
-    private var mAdapter: ColorsAdapter? = null
-    private var prefs: SharedPreferences? = null
+class ColorOptionsActivity : PreferencesActivity<Color>(
+    values = COLORS,
+    viewLayout = R.layout.imageview_and_textview_item,
+    viewHolder = ::ColorOptionViewHolder
+) {
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.wearablerecyclerview_activity)
-
-        prefs = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-
-        mAdapter = ColorsAdapter()
-        wearable_recycler_view.apply {
-            layoutManager = WearableLinearLayoutManager(this@ColorOptionsActivity)
-            isEdgeItemsCenteringEnabled = true
-            itemAnimator = DefaultItemAnimator()
-            adapter = mAdapter
-        }
-        mAdapter!!.notifyDataSetChanged()
+    override fun SharedPreferences.Editor.save(position: Int, item: Color) {
+        putInt(getString(R.string.preference_background_color), item.colorcode)
     }
 
-    inner class ColorsAdapter : RecyclerView.Adapter<ColorsAdapter.MyViewHolder>() {
+    override fun getConfirmationMessage(item: Color) =
+        "\"" + item.name + "\" set"
 
-        inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ColorOptionViewHolder(view: View): BindableHolder<Color>(view) {
+        val name: TextView = view.settingsListTextView
+        val icon: ImageView = view.settingsListImagetView
 
-            var name: TextView = view.settingsListTextView
-            var icon: ImageView = view.settingsListImagetView
-
-            init {
-                view.setOnClickListener {
-                    val position = adapterPosition // gets item position
-                    val selectedMenuItem = COLORS[position]
-                    prefs!!.edit().putInt(getString(R.string.preference_background_color), selectedMenuItem.colorcode)
-                        .apply()
-                    Toast.makeText(
-                        applicationContext,
-                        "\"" + selectedMenuItem.name + "\" set",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish()
-                }
-            }
-        }
-
-        override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
-        ): ColorsAdapter.MyViewHolder {
-            Log.d(TAG, "MyViewHolder onCreateViewHolder")
-            val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.imageview_and_textview_item, parent, false)
-            return MyViewHolder(itemView)
-        }
-
-        override fun onBindViewHolder(holder: ColorsAdapter.MyViewHolder, position: Int) {
-            Log.d(TAG, "MyViewHolder onBindViewHolder")
-            val color = COLORS[position]
-            holder.name.text = color.name
-            holder.icon.setColorFilter(color.colorcode, Mode.SRC_IN)
-        }
-
-        override fun getItemCount(): Int {
-            return COLORS.size
+        override fun bind(item: Color) {
+            name.text = item.name
+            icon.setColorFilter(item.colorcode, Mode.SRC_IN)
         }
     }
 
     companion object {
-        private const val TAG = "ColorOptionsActivity"
 
         private fun color(name: String, hexCode: String) =
             Color(name, android.graphics.Color.parseColor(hexCode))
