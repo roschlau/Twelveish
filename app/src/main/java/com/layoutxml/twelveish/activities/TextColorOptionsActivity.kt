@@ -7,23 +7,23 @@
 package com.layoutxml.twelveish.activities
 
 import android.content.SharedPreferences
-import android.graphics.PorterDuff.Mode
+import android.graphics.PorterDuff
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.layoutxml.twelveish.COLORS
 import com.layoutxml.twelveish.R
+import com.layoutxml.twelveish.TEXT_COLORS
 import com.layoutxml.twelveish.objects.Color
 import kotlinx.android.synthetic.main.imageview_and_textview_item.view.*
 
-class ColorOptionsActivity : PreferencesActivity<Color>(
-    values = COLORS,
+class TextColorOptionsActivity : PreferencesActivity<Color>(
+    values = TEXT_COLORS,
     viewLayout = R.layout.imageview_and_textview_item,
     viewHolder = ::ColorOptionViewHolder
 ) {
 
     override fun SharedPreferences.Editor.save(position: Int, item: Color) {
-        putInt(getString(R.string.preference_background_color), item.colorcode)
+        putInt(intent.getStringExtra("SettingsValue"), item.colorcode)
     }
 
     override fun getConfirmationMessage(item: Color) =
@@ -35,7 +35,7 @@ class ColorOptionsActivity : PreferencesActivity<Color>(
 
         override fun bind(item: Color) {
             name.text = item.name
-            icon.setColorFilter(item.colorcode, Mode.SRC_IN)
+            icon.setColorFilter(item.colorcode, PorterDuff.Mode.SRC_IN)
         }
     }
 }
