@@ -54,206 +54,46 @@ public class TextColorOptionsActivity extends Activity{
     }
 
     private void generateValues(){
-        Color color = new Color();
-        color.setName("White");
-        color.setColorcode(android.graphics.Color.parseColor("#ffffff"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Gray 400");
-        color.setColorcode(android.graphics.Color.parseColor("#bdbdbd"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Gray 500");
-        color.setColorcode(android.graphics.Color.parseColor("#9e9e9e"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Gray 600");
-        color.setColorcode(android.graphics.Color.parseColor("#757575"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Gray 700");
-        color.setColorcode(android.graphics.Color.parseColor("#616161"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Gray 800");
-        color.setColorcode(android.graphics.Color.parseColor("#424242"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Gray 900");
-        color.setColorcode(android.graphics.Color.parseColor("#212121"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Black");
-        color.setColorcode(android.graphics.Color.parseColor("#000000"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Red");
-        color.setColorcode(android.graphics.Color.parseColor("#ff0000"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Magenta");
-        color.setColorcode(android.graphics.Color.parseColor("#ff00ff"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Yellow");
-        color.setColorcode(android.graphics.Color.parseColor("#ffff00"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Green");
-        color.setColorcode(android.graphics.Color.parseColor("#00ff00"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Cyan");
-        color.setColorcode(android.graphics.Color.parseColor("#00ffff"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Blue");
-        color.setColorcode(android.graphics.Color.parseColor("#0000ff"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Red");
-        color.setColorcode(android.graphics.Color.parseColor("#A62C23"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Pink");
-        color.setColorcode(android.graphics.Color.parseColor("#A61646"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Purple");
-        color.setColorcode(android.graphics.Color.parseColor("#9224A6"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Deep Purple");
-        color.setColorcode(android.graphics.Color.parseColor("#5E35A6"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Indigo");
-        color.setColorcode(android.graphics.Color.parseColor("#3A4AA6"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Blue");
-        color.setColorcode(android.graphics.Color.parseColor("#1766A6"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Light Blue");
-        color.setColorcode(android.graphics.Color.parseColor("#0272A6"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Cyan");
-        color.setColorcode(android.graphics.Color.parseColor("#0092A6"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Teal");
-        color.setColorcode(android.graphics.Color.parseColor("#00A695"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Green");
-        color.setColorcode(android.graphics.Color.parseColor("#47A64A"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Light Green");
-        color.setColorcode(android.graphics.Color.parseColor("#76A63F"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Lime");
-        color.setColorcode(android.graphics.Color.parseColor("#99A62B"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Yellow");
-        color.setColorcode(android.graphics.Color.parseColor("#A69926"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Amber");
-        color.setColorcode(android.graphics.Color.parseColor("#A67E05"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Orange");
-        color.setColorcode(android.graphics.Color.parseColor("#A66300"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Deep Orange");
-        color.setColorcode(android.graphics.Color.parseColor("#A63716"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Brown");
-        color.setColorcode(android.graphics.Color.parseColor("#A67563"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Gray");
-        color.setColorcode(android.graphics.Color.parseColor("#676767"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Material Blue Gray");
-        color.setColorcode(android.graphics.Color.parseColor("#7295A6"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Gold");
-        color.setColorcode(android.graphics.Color.parseColor("#FFD700"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Sunset");
-        color.setColorcode(android.graphics.Color.parseColor("#F8B195"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Fog");
-        color.setColorcode(android.graphics.Color.parseColor("#A8A7A7"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Summer Red");
-        color.setColorcode(android.graphics.Color.parseColor("#fe4a49"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Aqua");
-        color.setColorcode(android.graphics.Color.parseColor("#2ab7ca"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Sun");
-        color.setColorcode(android.graphics.Color.parseColor("#fed766"));
-        values.add(color);
-
-        color = new Color();
-        color.setName("Dawn");
-        color.setColorcode(android.graphics.Color.parseColor("#451e3e"));
-        values.add(color);
-
+        values.add(new Color("White", android.graphics.Color.parseColor("#ffffff")));
+        values.add(new Color("Gray 400", android.graphics.Color.parseColor("#bdbdbd")));
+        values.add(new Color("Gray 500", android.graphics.Color.parseColor("#9e9e9e")));
+        values.add(new Color("Gray 600", android.graphics.Color.parseColor("#757575")));
+        values.add(new Color("Gray 700", android.graphics.Color.parseColor("#616161")));
+        values.add(new Color("Gray 800", android.graphics.Color.parseColor("#424242")));
+        values.add(new Color("Gray 900", android.graphics.Color.parseColor("#212121")));
+        values.add(new Color("Black", android.graphics.Color.parseColor("#000000")));
+        values.add(new Color("Red", android.graphics.Color.parseColor("#ff0000")));
+        values.add(new Color("Magenta", android.graphics.Color.parseColor("#ff00ff")));
+        values.add(new Color("Yellow", android.graphics.Color.parseColor("#ffff00")));
+        values.add(new Color("Green", android.graphics.Color.parseColor("#00ff00")));
+        values.add(new Color("Cyan", android.graphics.Color.parseColor("#00ffff")));
+        values.add(new Color("Blue", android.graphics.Color.parseColor("#0000ff")));
+        values.add(new Color("Material Red", android.graphics.Color.parseColor("#A62C23")));
+        values.add(new Color("Material Pink", android.graphics.Color.parseColor("#A61646")));
+        values.add(new Color("Material Purple", android.graphics.Color.parseColor("#9224A6")));
+        values.add(new Color("Material Deep Purple", android.graphics.Color.parseColor("#5E35A6")));
+        values.add(new Color("Material Indigo", android.graphics.Color.parseColor("#3A4AA6")));
+        values.add(new Color("Material Blue", android.graphics.Color.parseColor("#1766A6")));
+        values.add(new Color("Material Light Blue", android.graphics.Color.parseColor("#0272A6")));
+        values.add(new Color("Material Cyan", android.graphics.Color.parseColor("#0092A6")));
+        values.add(new Color("Material Teal", android.graphics.Color.parseColor("#00A695")));
+        values.add(new Color("Material Green", android.graphics.Color.parseColor("#47A64A")));
+        values.add(new Color("Material Light Green", android.graphics.Color.parseColor("#76A63F")));
+        values.add(new Color("Material Lime", android.graphics.Color.parseColor("#99A62B")));
+        values.add(new Color("Material Yellow", android.graphics.Color.parseColor("#A69926")));
+        values.add(new Color("Material Amber", android.graphics.Color.parseColor("#A67E05")));
+        values.add(new Color("Material Orange", android.graphics.Color.parseColor("#A66300")));
+        values.add(new Color("Material Deep Orange", android.graphics.Color.parseColor("#A63716")));
+        values.add(new Color("Material Brown", android.graphics.Color.parseColor("#A67563")));
+        values.add(new Color("Material Gray", android.graphics.Color.parseColor("#676767")));
+        values.add(new Color("Material Blue Gray", android.graphics.Color.parseColor("#7295A6")));
+        values.add(new Color("Gold", android.graphics.Color.parseColor("#FFD700")));
+        values.add(new Color("Sunset", android.graphics.Color.parseColor("#F8B195")));
+        values.add(new Color("Fog", android.graphics.Color.parseColor("#A8A7A7")));
+        values.add(new Color("Summer Red", android.graphics.Color.parseColor("#fe4a49")));
+        values.add(new Color("Aqua", android.graphics.Color.parseColor("#2ab7ca")));
+        values.add(new Color("Sun", android.graphics.Color.parseColor("#fed766")));
+        values.add(new Color("Dawn", android.graphics.Color.parseColor("#451e3e")));
         mAdapter.notifyDataSetChanged();
     }
 
