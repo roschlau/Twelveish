@@ -15,14 +15,13 @@ import com.layoutxml.twelveish.R
 import kotlinx.android.synthetic.main.wearablerecyclerview_activity.*
 
 abstract class PreferencesActivity<Item>(
-    protected val values: List<Item>,
-    protected val viewLayout: Int,
-    protected val viewHolder: (View) -> BindableHolder<Item>
+    private val values: List<Item>,
+    private val viewLayout: Int,
+    private val viewHolder: (View) -> BindableHolder<Item>,
+    private val confirmationMessage: (Item) -> String
 ) : Activity() {
 
     protected abstract fun SharedPreferences.Editor.save(position: Int, item: Item)
-
-    protected abstract fun getConfirmationMessage(item: Item): String
 
     private var mAdapter: RecyclerView.Adapter<BindableHolder<Item>>? = null
     private var prefs: SharedPreferences? = null
@@ -52,7 +51,7 @@ abstract class PreferencesActivity<Item>(
                 prefs!!.edit().apply { save(position, selectedMenuItem) }.apply()
                 Toast.makeText(
                     applicationContext,
-                    getConfirmationMessage(selectedMenuItem),
+                    confirmationMessage(selectedMenuItem),
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()

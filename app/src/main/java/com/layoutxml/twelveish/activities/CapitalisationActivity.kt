@@ -10,21 +10,18 @@ import android.content.SharedPreferences
 import android.view.View
 import android.widget.TextView
 import com.layoutxml.twelveish.R
-import com.layoutxml.twelveish.objects.Capitalisation
 import kotlinx.android.synthetic.main.textview_item.view.*
 
 class CapitalisationActivity : PreferencesActivity<Capitalisation>(
     values = CAPITALISATIONS,
     viewLayout = R.layout.textview_item,
-    viewHolder = ::MyViewHolder
+    viewHolder = ::MyViewHolder,
+    confirmationMessage = { "Capitalisation mode set" }
 ) {
 
     override fun SharedPreferences.Editor.save(position: Int, item: Capitalisation) {
         putInt(getString(R.string.preference_capitalisation), position)
     }
-
-    override fun getConfirmationMessage(item: Capitalisation) =
-        "Capitalisation mode set"
 
     class MyViewHolder(view: View) : BindableHolder<Capitalisation>(view) {
         val name: TextView = view.dateoptionslistListTextView
@@ -45,3 +42,5 @@ class CapitalisationActivity : PreferencesActivity<Capitalisation>(
     }
 
 }
+
+class Capitalisation(val name: String? = null)

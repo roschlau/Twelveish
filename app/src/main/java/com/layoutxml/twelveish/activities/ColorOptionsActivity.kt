@@ -12,22 +12,20 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.layoutxml.twelveish.COLORS
+import com.layoutxml.twelveish.Color
 import com.layoutxml.twelveish.R
-import com.layoutxml.twelveish.objects.Color
 import kotlinx.android.synthetic.main.imageview_and_textview_item.view.*
 
 class ColorOptionsActivity : PreferencesActivity<Color>(
     values = COLORS,
     viewLayout = R.layout.imageview_and_textview_item,
-    viewHolder = ::ColorOptionViewHolder
+    viewHolder = ::ColorOptionViewHolder,
+    confirmationMessage = { "\"" + it.name + "\" set" }
 ) {
 
     override fun SharedPreferences.Editor.save(position: Int, item: Color) {
         putInt(getString(R.string.preference_background_color), item.colorcode)
     }
-
-    override fun getConfirmationMessage(item: Color) =
-        "\"" + item.name + "\" set"
 
     class ColorOptionViewHolder(view: View): BindableHolder<Color>(view) {
         val name: TextView = view.settingsListTextView

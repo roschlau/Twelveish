@@ -2,9 +2,14 @@ package com.layoutxml.twelveish
 
 import android.graphics.Color
 
+class Color(
+    val name: String,
+    val colorcode: Int
+)
+
 
 private fun color(name: String, hexCode: String) =
-    com.layoutxml.twelveish.objects.Color(name, Color.parseColor(hexCode))
+    Color(name, Color.parseColor(hexCode))
 
 val COLORS = listOf(
     color("Black", "#000000"),
@@ -44,7 +49,7 @@ val COLORS = listOf(
 )
 
 val TEXT_COLORS = listOf(
-    com.layoutxml.twelveish.objects.Color("White", Color.parseColor("#ffffff")),
+    color("White", "#ffffff"),
     color("Gray 400", "#bdbdbd"),
     color("Gray 500", "#9e9e9e"),
     color("Gray 600", "#757575"),

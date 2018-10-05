@@ -11,23 +11,21 @@ import android.graphics.PorterDuff
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.layoutxml.twelveish.Color
 import com.layoutxml.twelveish.R
 import com.layoutxml.twelveish.TEXT_COLORS
-import com.layoutxml.twelveish.objects.Color
 import kotlinx.android.synthetic.main.imageview_and_textview_item.view.*
 
 class TextColorOptionsActivity : PreferencesActivity<Color>(
     values = TEXT_COLORS,
     viewLayout = R.layout.imageview_and_textview_item,
-    viewHolder = ::ColorOptionViewHolder
+    viewHolder = ::ColorOptionViewHolder,
+    confirmationMessage = { "\"" + it.name + "\" set" }
 ) {
 
     override fun SharedPreferences.Editor.save(position: Int, item: Color) {
         putInt(intent.getStringExtra("SettingsValue"), item.colorcode)
     }
-
-    override fun getConfirmationMessage(item: Color) =
-        "\"" + item.name + "\" set"
 
     class ColorOptionViewHolder(view: View): BindableHolder<Color>(view) {
         val name: TextView = view.settingsListTextView

@@ -10,6 +10,7 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.*
 import android.graphics.*
+import android.graphics.Color
 import android.net.Uri
 import android.os.*
 import android.support.v4.app.NotificationCompat
